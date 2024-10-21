@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hacker News UI</title>
     <link rel="stylesheet" href="styles.css">
-
 </head>
+
 <body>
     <header>
         <h1>Hacker News</h1>
     </header>
-    
+
     <div id="live-data"></div>
-    <label for="post-type"id="lab">Select Post Type:</label>
-<select id="post-type">
-    <option value="newstories" selected >Stories</option>
-    <option value="jobstories">Jobs</option>
-    <option value="topstories">Polls</option>
-</select>
+    <label for="post-type" id="lab">Select Post Type:</label>
+    <select id="post-type">
+        <option value="newstories" selected>Stories</option>
+        <option value="jobstories">Jobs</option>
+        <option value="topstories">Polls</option>
+    </select>
 
     <div id="feed"></div>
     <div id="loading">Loading...</div>
@@ -26,4 +27,5 @@
     <script src="script.js" defer></script>
 
 </body>
+
 </html>

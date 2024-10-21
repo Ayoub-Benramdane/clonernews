@@ -32,12 +32,12 @@ header {
 
 #feed {
     width: 60%;
-    margin-left:20%;
-    margin-top:50px;
+    margin-left: 20%;
+    margin-top: 50px;
 }
 
 #lab {
-    margin-left:20%;
+    margin-left: 20%;
 }
 
 .post {
@@ -99,7 +99,8 @@ button:hover {
     padding: 10px 20px;
 }
 
-#loading, #error-message {
+#loading,
+#error-message {
     text-align: center;
     margin-top: 20px;
     font-style: italic;

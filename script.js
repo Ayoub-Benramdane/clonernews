@@ -99,15 +99,12 @@ function displayPosts(posts) {
       const postElement = document.createElement("div")
       postElement.classList.add("post")
       postElement.innerHTML = `
-                <h3>${post.url ? `<a href="${post.url}" target="_blank" rel="noopener noreferrer">` : ''}${post.title || post.text || "No Title"}${post.url ? '</a>' : ''} (${
-        post.type || "Unknown Type"
-      })</h3>
-                <p>by ${post.by || "Unknown"} | ${
-        new Date(post.time * 1000).toLocaleString() || "-"
-      } | Score: ${post.score || 0} | Comments: ${post.descendants || 0}</p>
-                <button onclick="toggleComments(${
-                  post.id
-                }, this)">Show Comments</button>
+                <h3>${post.url ? `<a href="${post.url}" target="_blank" rel="noopener noreferrer">` : ''}${post.title || post.text || "No Title"}${post.url ? '</a>' : ''} (${post.type || "Unknown Type"
+        })</h3>
+                <p>by ${post.by || "Unknown"} | ${new Date(post.time * 1000).toLocaleString() || "-"
+        } | Score: ${post.score || 0} | Comments: ${post.descendants || 0}</p>
+                <button onclick="toggleComments(${post.id
+        }, this)">Show Comments</button>
                 <div id="comments-${post.id}" style="display: none"></div>
             `
       feed.appendChild(postElement)
@@ -135,9 +132,8 @@ function displayComments(comments, container) {
       const commentElement = document.createElement("div")
       commentElement.classList.add("comment")
       commentElement.innerHTML = `
-                <p><strong>${comment.by || "Unknown"}:</strong> ${
-        comment.text || "No content"
-      }</p>
+                <p><strong>${comment.by || "Unknown"}:</strong> ${comment.text || "No content"
+        }</p>
             `
       container.appendChild(commentElement)
     }
