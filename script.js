@@ -1,9 +1,6 @@
 let currentOffset = 0
 const sizePage = 20
-let postStoryIds = []
-let postJobIds = []
-let postPollIds = []
-let idsToDisplay = []
+let [postStoryIds, postJobIds, postPollIds, idsToDisplay] = [[], [], [], []]
 let selectedType = "newstories"
 
 function debounce(func, wait) {
@@ -36,15 +33,13 @@ async function loadPosts(type) {
   const loadingElement = document.getElementById("loading")
   loadingElement.style.display = "block"
 
+  const storyIds = await fetchItems("newstories")
+  const jobIds = await fetchItems("jobstories")
+  const pollIds = await fetchItems("topstories")
+  postStoryIds = [...storyIds]
+  postJobIds = [...jobIds]
+  postPollIds = [...pollIds]
   try {
-    if (postStoryIds.length === 0) {
-      const storyIds = await fetchItems("newstories")
-      const jobIds = await fetchItems("jobstories")
-      const pollIds = await fetchItems("topstories")
-      postStoryIds = [...storyIds]
-      postJobIds = [...jobIds]
-      postPollIds = [...pollIds]
-    }
     switch (type) {
       case "newstories":
         idsToDisplay = postStoryIds
@@ -63,12 +58,8 @@ async function loadPosts(type) {
 
     displayPosts(newPosts)
     currentOffset += sizePage
+    if (currentOffset >= idsToDisplay.length) document.getElementById("load-more").style.display = "none"
 
-    if (currentOffset >= idsToDisplay.length) {
-      document.getElementById("load-more").style.display = "none"
-    } else {
-      document.getElementById("load-more").style.display = "block"
-    }
   } catch (error) {
     console.error("Error loading posts:", error)
   }
@@ -76,10 +67,9 @@ async function loadPosts(type) {
 }
 
 document.getElementById("post-type").addEventListener("change", (event) => {
-  selectedType = event.target.value
   currentOffset = 0
   document.getElementById("feed").innerHTML = ""
-  loadPosts(selectedType)
+  loadPosts(event.target.value)
 })
 
 async function loadComments(postId) {
@@ -93,18 +83,14 @@ async function loadComments(postId) {
 
 function displayPosts(posts) {
   const feed = document.getElementById("feed")
-
   posts.forEach((post) => {
     if (post) {
       const postElement = document.createElement("div")
       postElement.classList.add("post")
       postElement.innerHTML = `
-                <h3>${post.url ? `<a href="${post.url}" target="_blank" rel="noopener noreferrer">` : ''}${post.title || post.text || "No Title"}${post.url ? '</a>' : ''} (${post.type || "Unknown Type"
-        })</h3>
-                <p>by ${post.by || "Unknown"} | ${new Date(post.time * 1000).toLocaleString() || "-"
-        } | Score: ${post.score || 0} | Comments: ${post.descendants || 0}</p>
-                <button onclick="toggleComments(${post.id
-        }, this)">Show Comments</button>
+                <h3>${post.url ? `<a href="${post.url}" target="_blank" rel="noopener noreferrer">` : ''}${post.title || post.text || "No Title"}${post.url ? '</a>' : ''} (${post.type || "Unknown Type"})</h3>
+                <p>by ${post.by || "Unknown"} | ${new Date(post.time * 1000).toLocaleString() || "-"} | Score: ${post.score || 0} | Comments: ${post.descendants || 0}</p>
+                <button onclick="toggleComments(${post.id}, this)">Show Comments</button>
                 <div id="comments-${post.id}" style="display: none"></div>
             `
       feed.appendChild(postElement)
@@ -132,8 +118,7 @@ function displayComments(comments, container) {
       const commentElement = document.createElement("div")
       commentElement.classList.add("comment")
       commentElement.innerHTML = `
-                <p><strong>${comment.by || "Unknown"}:</strong> ${comment.text || "No content"
-        }</p>
+                <p><strong>${comment.by || "Unknown"}:</strong> ${comment.text || "No content"}</p>
             `
       container.appendChild(commentElement)
     }
@@ -146,7 +131,7 @@ async function updateLiveData() {
   const latestItem = await fetchItemDetails(latestItemId)
 
   liveDataContainer.innerHTML = `
-        <h2>Latest Update   ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</h2>
+        <h2 style="text-align:center">Latest Update   ${new Date().toLocaleTimeString()}</h2>
         <p>${latestItem.title || latestItem.text || "No content"}</p>
         <p>Type: ${latestItem.type}, by ${latestItem.by || "Unknown"}</p>
     `
