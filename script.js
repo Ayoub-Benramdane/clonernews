@@ -3,18 +3,6 @@ const sizePage = 20
 let [postStoryIds, postJobIds, postPollIds, idsToDisplay] = [[], [], [], []]
 let selectedType = "newstories"
 
-function debounce(func, wait) {
-  let timeout
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout)
-      func(...args)
-    }
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-  }
-}
-
 async function fetchItems(type) {
   const response = await fetch(
     `https://hacker-news.firebaseio.com/v0/${type}.json`
